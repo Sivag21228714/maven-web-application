@@ -1,1 +1,46 @@
 
+
+node{
+   def mavenHome = tool name: "maven3.8.3"
+   properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '9')), [$class: 'JobLocalConfiguration', changeReasonComment: ''], pipelineTriggers([pollSCM('* * * * *')])])
+   
+  stage('CheckOutCode'){
+   git branch: 'development', credentialsId: 'cb830ddd-9d3c-42e0-8a94-b7aaacc00e50', url: 'https://github.com/Sivag21228714/maven-web-application.git'
+}
+  stage('Build'){
+   sh "${mavenHome}/bin/mvn clean package"
+}
+/*
+ stage('ExcuteSonarQubeReport'){
+   sh "${mavenHome}/bin/mvn clean sonar:sonar"   
+}
+ stage('UploadArtifactsIntoNexusRepo'){
+  sh "${mavenHome}/bin/mvn deploy"
+ }
+ 
+ stage('DeployAppIntoTomcatServer'){
+   sshagent(['b6dc1320-373b-4816-bc42-16ef3d2495e3']) {
+     sh "scp -o StrictHostKeyChecking=no target/maven-web-application.war ec2-user@52.66.249.100:/opt/apache-tomcat-9.0.54/webapps/"
+  }
+ }
+
+  post{
+   success{
+mail bcc: '', body: '''Build over - success
+
+Regards
+gorla siva krishna
+9502934630''', cc: 'sivakrishnagorla47@gmail.com', from: '', replyTo: '', subject: 'Build over', to: 'sivakrishnagorla47@gmail.com'
+
+
+}
+
+   failure{
+
+     mail bcc: '', body: '''Build over  - Failure
+     }
+    } 
+*/
+ 
+}
+
